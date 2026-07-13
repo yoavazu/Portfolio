@@ -44,15 +44,14 @@ export default function Hero() {
             View Projects
           </a>
           {[
-            { label: 'LinkedIn', href: links.linkedin },
-            { label: 'GitHub', href: links.github },
-            { label: 'Resume', href: links.resume },
+            { label: 'LinkedIn', href: links.linkedin, external: true },
+            { label: 'Resume', href: links.resume, external: true },
+            { label: links.email, href: `mailto:${links.email}`, external: false },
           ].map((btn) => (
             <a
               key={btn.label}
               href={btn.href}
-              target="_blank"
-              rel="noreferrer"
+              {...(btn.external ? { target: '_blank', rel: 'noreferrer' } : {})}
               className="rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-zinc-300 transition-colors hover:border-white/40 hover:text-white"
             >
               {btn.label}

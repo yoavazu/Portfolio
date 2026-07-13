@@ -25,10 +25,13 @@ with live preview.
 
 ## Project screenshots
 
-Screenshots are static files: drop images into `public/projects/` (e.g.
-`public/projects/solos/1.png`) and list their paths in the project's
-`screenshots` array — either in `projects.js` or via the edit panel
-(`/projects/solos/1.png`). An empty array shows placeholder boxes.
+Screenshots are static files: create a folder named after the project's
+**title** inside `public/projects/` (e.g. `public/projects/Safsalim/1.png`)
+and list the paths in that project's `screenshots` array — either directly in
+`projects.js` or via the edit panel, which shows the exact folder/path to use
+for each project. Clicking a screenshot opens it in a lightbox (✕ to close,
+Escape also works). Projects with no screenshots simply don't show a
+Screenshots section — no empty placeholders.
 
 ## Adding a new album-cover style
 
@@ -55,8 +58,8 @@ dropdown and can be used as `pattern: 'diagonal'` in `projects.js`.
 
 | What | Where |
 |---|---|
-| Projects (Cover Flow) | [`src/data/projects.js`](src/data/projects.js) — add/remove/reorder objects; the UI regenerates itself. Each project's album art is CSS-only, configured via its `cover` field (gradient colors + a pattern: `rings`, `map`, `orb`, `bars`, `grid`). |
-| Links, skills, experience | [`src/data/site.js`](src/data/site.js) |
+| Projects (Cover Flow) | [`src/data/projects.js`](src/data/projects.js) — add/remove/reorder objects; the UI regenerates itself. Each project's album art is CSS-only, configured via its `cover` field (gradient colors + a pattern: `rings`, `map`, `orb`, `bars`, `grid`, `waves`, `sunburst`, `mosaic`). |
+| Hero text, links | [`src/data/site.js`](src/data/site.js) |
 | Accent color | `--color-accent` in [`src/index.css`](src/index.css) |
 | Resume | Replace `public/resume.pdf` |
 

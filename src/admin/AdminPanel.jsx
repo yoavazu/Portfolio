@@ -38,6 +38,9 @@ function ListField({ label, value, onChange }) {
   )
 }
 
+/** Suggested screenshots folder name for a project — its title, filesystem-safe. */
+const folderName = (title) => title.replace(/[\\/:*?"<>|]+/g, '').trim() || 'project'
+
 function ColorField({ label, ...props }) {
   return (
     <label className="flex items-center gap-2">
@@ -97,7 +100,7 @@ export default function AdminPanel({ onClose }) {
       return { ...c, [key]: arr }
     })
 
-  const { hero, about, contact, links, skills, experience, projects } = content
+  const { hero, links, projects } = content
 
   return (
     <aside className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l border-white/10 bg-zinc-950 shadow-2xl">
@@ -128,19 +131,6 @@ export default function AdminPanel({ onClose }) {
           <Area label="Intro" value={hero.intro} onChange={(e) => patchObj('hero', 'intro', e.target.value)} />
         </Group>
 
-        <Group title="About">
-          <Field label="Title" value={about.title} onChange={(e) => patchObj('about', 'title', e.target.value)} />
-          <Area
-            label="Paragraphs (blank line between; **word** = emphasis)"
-            rows={9}
-            value={about.paragraphs.join('\n\n')}
-            onChange={(e) =>
-              patchObj('about', 'paragraphs', e.target.value.split(/\n\s*\n/).filter(Boolean))
-            }
-          />
-          <ListField label="Interests" value={about.interests} onChange={(v) => patchObj('about', 'interests', v)} />
-        </Group>
-
         <Group title={`Projects (${projects.length})`}>
           {projects.map((p, i) => (
             <details key={p.id} className="rounded-lg border border-white/10">
@@ -160,8 +150,6 @@ export default function AdminPanel({ onClose }) {
                 <Field label="Tagline" value={p.tagline} onChange={(e) => patchItem('projects', i, 'tagline', e.target.value)} />
                 <Area label="Description" value={p.description} onChange={(e) => patchItem('projects', i, 'description', e.target.value)} />
                 <ListField label="Technologies" value={p.tech} onChange={(v) => patchItem('projects', i, 'tech', v)} />
-                <Area label="Challenges" value={p.challenges} onChange={(e) => patchItem('projects', i, 'challenges', e.target.value)} />
-                <Area label="What I learned" value={p.learned} onChange={(e) => patchItem('projects', i, 'learned', e.target.value)} />
                 <Field label="GitHub URL" value={p.github ?? ''} onChange={(e) => patchItem('projects', i, 'github', e.target.value || null)} />
                 <Field label="Live demo URL (optional)" value={p.demo ?? ''} onChange={(e) => patchItem('projects', i, 'demo', e.target.value || null)} />
                 <div>
@@ -171,8 +159,10 @@ export default function AdminPanel({ onClose }) {
                     onChange={(v) => patchItem('projects', i, 'screenshots', v)}
                   />
                   <p className="mt-1 text-[0.65rem] leading-snug text-zinc-600">
-                    Put image files in <code className="text-zinc-400">public/projects/</code> and list
-                    their paths, e.g. <code className="text-zinc-400">/projects/{p.id}/1.png</code>
+                    Put image files in{' '}
+                    <code className="text-zinc-400">public/projects/{folderName(p.title)}/</code> and list
+                    their paths, e.g.{' '}
+                    <code className="text-zinc-400">/projects/{folderName(p.title)}/1.png</code>
                   </p>
                 </div>
                 {/* Album cover artwork */}
@@ -210,8 +200,6 @@ export default function AdminPanel({ onClose }) {
                 year: String(new Date().getFullYear()),
                 description: '',
                 tech: [],
-                challenges: '',
-                learned: '',
                 github: null,
                 demo: null,
                 screenshots: [],
@@ -223,45 +211,8 @@ export default function AdminPanel({ onClose }) {
           </SmallBtn>
         </Group>
 
-        <Group title="Skills">
-          {skills.map((group, i) => (
-            <div key={i} className="space-y-2 rounded-lg border border-white/10 p-3">
-              <div className="flex items-end gap-2">
-                <Field label="Category" value={group.category} onChange={(e) => patchItem('skills', i, 'category', e.target.value)} />
-                <SmallBtn onClick={() => removeItem('skills', i)}>✕</SmallBtn>
-              </div>
-              <ListField label="Items" value={group.items} onChange={(v) => patchItem('skills', i, 'items', v)} />
-            </div>
-          ))}
-          <SmallBtn onClick={() => addItem('skills', { category: 'New category', items: [] })}>
-            + Add category
-          </SmallBtn>
-        </Group>
-
-        <Group title="Experience">
-          {experience.map((entry, i) => (
-            <div key={i} className="space-y-2 rounded-lg border border-white/10 p-3">
-              <div className="flex items-end gap-2">
-                <Field label="Period" value={entry.period} onChange={(e) => patchItem('experience', i, 'period', e.target.value)} />
-                <SmallBtn disabled={i === 0} onClick={() => moveItem('experience', i, -1)}>↑</SmallBtn>
-                <SmallBtn disabled={i === experience.length - 1} onClick={() => moveItem('experience', i, 1)}>↓</SmallBtn>
-                <SmallBtn onClick={() => removeItem('experience', i)}>✕</SmallBtn>
-              </div>
-              <Field label="Title" value={entry.title} onChange={(e) => patchItem('experience', i, 'title', e.target.value)} />
-              <Field label="Organization" value={entry.org} onChange={(e) => patchItem('experience', i, 'org', e.target.value)} />
-              <Area label="Description" value={entry.description} onChange={(e) => patchItem('experience', i, 'description', e.target.value)} />
-            </div>
-          ))}
-          <SmallBtn onClick={() => addItem('experience', { period: '2026', title: 'New entry', org: '', description: '' })}>
-            + Add entry
-          </SmallBtn>
-        </Group>
-
-        <Group title="Contact & links">
-          <Field label="Contact heading" value={contact.heading} onChange={(e) => patchObj('contact', 'heading', e.target.value)} />
-          <Area label="Contact blurb" value={contact.blurb} onChange={(e) => patchObj('contact', 'blurb', e.target.value)} />
+        <Group title="Links">
           <Field label="Email" value={links.email} onChange={(e) => patchObj('links', 'email', e.target.value)} />
-          <Field label="GitHub" value={links.github} onChange={(e) => patchObj('links', 'github', e.target.value)} />
           <Field label="LinkedIn" value={links.linkedin} onChange={(e) => patchObj('links', 'linkedin', e.target.value)} />
           <Field label="Resume path" value={links.resume} onChange={(e) => patchObj('links', 'resume', e.target.value)} />
         </Group>
