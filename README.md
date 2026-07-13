@@ -10,18 +10,20 @@ npm run build    # production build → dist/
 
 ## Edit mode (owner only)
 
-Visit **`/#edit`** on the site and enter the password (default: `vinyl-2026`).
-A floating pill appears — open the editor to change any text, add/remove/reorder
-projects (including their cover artwork), skills, timeline entries and links,
-with live preview.
+Visit **`/#edit`** on the site and enter the admin password. A floating pill
+appears — open the editor to change any text, add/remove/reorder projects
+(including their cover artwork and screenshots) and links, with live preview.
 
 - Edits are saved as a **draft in your browser only** (localStorage).
 - To publish: click **Export data files**, drop the downloaded
   `projects.js` / `site.js` into `src/data/`, commit and redeploy.
   The public site can only change through a deploy — that, not the password,
   is what keeps it owner-only.
-- To change the password: `echo -n "new-password" | shasum -a 256` and paste
-  the hash into `PASS_HASH` in [`src/admin/Admin.jsx`](src/admin/Admin.jsx).
+- The password is never stored in plaintext, only as a SHA-256 hash in
+  `PASS_HASH` — **do not commit the plaintext password anywhere**, including
+  this file. To set or change it: `echo -n "your-new-password" | shasum -a 256`
+  and paste the resulting hash into `PASS_HASH` in
+  [`src/admin/Admin.jsx`](src/admin/Admin.jsx).
 
 ## Project screenshots
 

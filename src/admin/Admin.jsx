@@ -4,15 +4,16 @@ import { lazy, Suspense, useEffect, useState } from 'react'
  * Owner-only edit mode. Activate by visiting /#edit — invisible otherwise,
  * and the editor code is lazy-loaded so visitors never download it.
  *
- * PASS_HASH is the SHA-256 of the admin password. To change the password run:
+ * PASS_HASH is the SHA-256 of the admin password (never commit the plaintext
+ * password itself — only its hash). To change the password run:
  *   echo -n "your-new-password" | shasum -a 256
- * and paste the result here. (Default password: vinyl-2026)
+ * and paste the result here.
  *
  * Note: this gates the editing UI only. Edits live in this browser's
  * localStorage until you export them into src/data/ and redeploy — the
  * published site can only change through a deploy.
  */
-const PASS_HASH = '6c8675b5b3c764aab4e9e380cd4b49c05e5d1cf25f5122bd5b0e685d5eb936ad'
+const PASS_HASH = 'f31acde870fba2e2c7c975c0d061e207aaa36719abf0af898edf24511550dd9f'
 const SESSION_KEY = 'portfolio-admin'
 
 const AdminPanel = lazy(() => import('./AdminPanel'))
