@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  /* The single accent color — change it here to retheme the whole site */
+  --color-accent: #e0a458;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+    Inter, Roboto, sans-serif;
+}
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+body {
+  @apply bg-zinc-950 text-zinc-300 antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #09090b;
+}
+
+/* Classic Cover Flow reflection (Chromium / Safari; harmless elsewhere) */
+.reflect {
+  -webkit-box-reflect: below 10px
+    linear-gradient(transparent 62%, rgba(255, 255, 255, 0.14));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
